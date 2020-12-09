@@ -6,7 +6,7 @@ Compatible with OpenSeadragon 2.1.0 or greater.
 
 ## Documentation
 
-To use, include the `openseadragon-fabricjs-overlay.js` file after `openseadragon.js` on your web page.
+To use, include the `fabric.adapted.js` and `openseadragon-fabricjs-overlay.js` files after `openseadragon.js` on your web page.
 
 To add fabricjs overlay capability to your OpenSeadragon Viewer, call `fabricjsOverlay({scale: scaleWidth})` on it. `scaleWidth` is arbitrary scale for created fabric canvas. 0 corresponds to 0 and `scaleWidth` corresponds to 1 in OpenSeadragon viewport coordinates. This will return a new object with the following methods:
 
