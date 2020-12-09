@@ -5,7 +5,6 @@
   <title>OpenSeadragon Fabricjs Overlay Demo</title>
   <script src="openseadragon/openseadragon.js"></script>
   <script src="openseadragon-fabricjs-overlay.js"></script>
-
   <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
   <script src="fabric/fabric.adapted.js"></script>
 
@@ -17,107 +16,109 @@
       height: 100%;
       margin: 0;
     }
+
   </style>
 
 </head>
 
 <body>
 <div class="openseadragon1" id="contentDiv"></div>
-  <script>
+<script>
+  // ----------
+  App = {
     // ----------
-    App = {
-      // ----------
-      init: function () {
-        let self = this
+    init: function () {
+      let self = this
 
-        let tileSource = {
-          Image: {
-            xmlns: 'http://schemas.microsoft.com/deepzoom/2008',
-            Url: 'http://openseadragon.github.io/example-images/highsmith/highsmith_files/',
-            Format: 'jpg',
-            Overlap: '2',
-            TileSize: '256',
-            Size: {
-              Height: '9221',
-              Width: '7026'
-            }
+      let tileSource = {
+        Image: {
+          xmlns: 'http://schemas.microsoft.com/deepzoom/2008',
+          Url: 'http://openseadragon.github.io/example-images/highsmith/highsmith_files/',
+          Format: 'jpg',
+          Overlap: '2',
+          TileSize: '256',
+          Size: {
+            Height: '9221',
+            Width: '7026'
           }
         }
+      }
 
-        let tileSourceIIIF = {
-          '@context': 'http://iiif.io/api/image/2/context.json',
-          '@id': 'https://libimages1.princeton.edu/loris/pudl0001%2F4609321%2Fs42%2F00000001.jp2',
-          height: 7200,
-          width: 5233,
-          profile: ['http://iiif.io/api/image/2/level2.json'],
-          protocol: 'http://iiif.io/api/image',
-          tiles: [{
-            scaleFactors: [1, 2, 4, 8, 16, 32],
-            width: 1024
-          }]
-        }
+      let tileSourceIIIF = {
+        '@context': 'http://iiif.io/api/image/2/context.json',
+        '@id': 'https://libimages1.princeton.edu/loris/pudl0001%2F4609321%2Fs42%2F00000001.jp2',
+        height: 7200,
+        width: 5233,
+        profile: ['http://iiif.io/api/image/2/level2.json'],
+        protocol: 'http://iiif.io/api/image',
+        tiles: [{
+          scaleFactors: [1, 2, 4, 8, 16, 32],
+          width: 1024
+        }]
+      }
 
-        this.viewer = OpenSeadragon({
-          id: 'contentDiv',
-          prefixUrl: 'openseadragon/images/',
-          tileSources: [{
-            tileSource: tileSource,
+      this.viewer = OpenSeadragon({
+        id: 'contentDiv',
+        prefixUrl: 'openseadragon/images/',
+        tileSources: [{
+          tileSource: tileSource,
+          width: 1,
+          y: 0,
+          x: 0
+        },
+          {
+            tileSource: tileSourceIIIF,
             width: 1,
             y: 0,
-            x: 0
-          },
-            {
-              tileSource: tileSourceIIIF,
-              width: 1,
-              y: 0,
-              x: 1.1
-            }]
-        })
+            x: 1.1
+          }
+        ]
+      })
 
-        // Initialize overlay
-        let overlay = this.viewer.fabricjsOverlay()
+      // Initialize overlay
+      let overlay = this.viewer.fabricjsOverlay()
 
-        // Add fabric rectangle
-        let rect = new fabric.Rect({
-          left: 0,
-          top: 0,
-          fill: 'red',
-          width: 200,
-          height: 200
-        })
-        overlay.fabricCanvas().add(rect)
+      // Add fabric rectangle
+      let rect = new fabric.Rect({
+        left: 0,
+        top: 0,
+        fill: 'red',
+        width: 200,
+        height: 200
+      })
+      overlay.fabricCanvas().add(rect)
 
-        // Add fabric circle
-        let circle = new fabric.Circle({
-          left: 1500,
-          top: 0,
-          fill: 'green',
-          radius: 100,
-          selectable: true,
-          action: 'gravity'
-        })
-        overlay.fabricCanvas().add(circle)
+      // Add fabric circle
+      let circle = new fabric.Circle({
+        left: 1500,
+        top: 0,
+        fill: 'green',
+        radius: 100,
+        selectable: true,
+        action: 'gravity'
+      })
+      overlay.fabricCanvas().add(circle)
 
-        // Create circle falling animation
-        circle.animate('top', '+=1200', {
-          onChange: overlay.fabricCanvas().renderAll.bind(overlay.fabricCanvas()),
-          duration: 2000,
-          easing: fabric.util.ease.easeOutBounce
-        })
+      // Create circle falling animation
+      circle.animate('top', '+=1200', {
+        onChange: overlay.fabricCanvas().renderAll.bind(overlay.fabricCanvas()),
+        duration: 2000,
+        easing: fabric.util.ease.easeOutBounce
+      })
 
-        circle.animate('scaleY', '-=.1', {
-          onChange: overlay.fabricCanvas().renderAll.bind(overlay.fabricCanvas()),
-          duration: 1000
+      circle.animate('scaleY', '-=.1', {
+        onChange: overlay.fabricCanvas().renderAll.bind(overlay.fabricCanvas()),
+        duration: 1000
 
-        })
+      })
 
-        // Check value
-        function isRealValue (obj) {
-          return obj && obj !== 'null' && obj !== 'undefined'
-        }
+      // Check value
+      function isRealValue (obj) {
+        return obj && obj !== 'null' && obj !== 'undefined'
+      }
 
       // Toggle button on and off
-      function btnDraw(flag, over, shape, txt) {
+      function btnDraw (flag, over, shape, txt) {
         // Toggle fabric canvas draw
         if (flag) {
           // Disable OSD mouse events
@@ -146,11 +147,11 @@
         }
       }
 
-        overlay.fabricCanvas().on('mouse:up', function (event) {
-          if (isRealValue(event.target)) {
-            if (event.target.type === 'path') {
-              btnDraw(false, overlay, circle2, text)
-            }
+      overlay.fabricCanvas().on('mouse:up', function (event) {
+        if (isRealValue(event.target)) {
+          if (event.target.type === 'path') {
+            btnDraw(false, overlay, circle2, text)
+          }
 
           // Animate circle on mouse release (try to drag circle up)
           if (event.target.action === 'gravity') {
@@ -172,50 +173,51 @@
         }
       })
 
-        // Add fabric circle with text
-        let circle2 = new fabric.Circle({
-          left: 930,
-          top: 100,
-          fill: 'lightgray',
-          radius: 120,
-          selectable: false,
-          action: 'button'
-        })
-        overlay.fabricCanvas().add(circle2)
+      // Add fabric circle with text
+      let circle2 = new fabric.Circle({
+        left: 930,
+        top: 100,
+        fill: 'lightgray',
+        radius: 120,
+        selectable: false,
+        action: 'button'
+      })
+      overlay.fabricCanvas().add(circle2)
 
-        let text = new fabric.Text('Start\n drawing', {
-          left: 950,
-          top: 150,
-          fontSize: 50,
-          fontFamily: 'Helvetica',
-          textAlign: 'center',
-          fill: 'black',
-          selectable: false,
-          action: 'button'
+      let text = new fabric.Text('Start\n drawing', {
+        left: 950,
+        top: 150,
+        fontSize: 50,
+        fontFamily: 'Helvetica',
+        textAlign: 'center',
+        fill: 'black',
+        selectable: false,
+        action: 'button'
 
-        })
-        overlay.fabricCanvas().add(text)
+      })
+      overlay.fabricCanvas().add(text)
 
-        overlay.fabricCanvas().freeDrawingBrush.color = 'red'
-        overlay.fabricCanvas().freeDrawingBrush.width = 30
+      overlay.fabricCanvas().freeDrawingBrush.color = 'red'
+      overlay.fabricCanvas().freeDrawingBrush.width = 30
 
-        // Start free-drawing mode
-        overlay.fabricCanvas().on('mouse:down', function (event) {
-          if (isRealValue(event.target)) {
-            if (event.target.action === 'button') {
-              btnDraw(true, overlay, circle2, text)
-            }
+      // Start free-drawing mode
+      overlay.fabricCanvas().on('mouse:down', function (event) {
+        if (isRealValue(event.target)) {
+          if (event.target.action === 'button') {
+            btnDraw(true, overlay, circle2, text)
           }
-        })
-      }
+        }
+      })
     }
+  }
 
-    // ----------
-    $(document).ready(function () {
-      App.init()
-    })
+  // ----------
+  $(document).ready(function () {
+    App.init()
+  })
 
-  </script>
+</script>
 
 </body>
+
 </html>
