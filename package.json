@@ -1,30 +1,24 @@
 {
-  "name": "openseadragon-fabricjs-overlay",
-  "version": "0.2.0",
-  "description": "An OpenSeadragon plugin that adds fabricjs canvas overlay capability.",
+  "name": "OpenseadragonFabricjsOverlay",
+  "version": "1.0.0",
+  "description": "An [OpenSeadragon](http://openseadragon.github.io) plugin that adds fabricjs overlay capability.",
   "main": "openseadragon-fabricjs-overlay.js",
-  "dependencies": {
-    "openseadragon": "^2.0.0"
-  },
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/altert/openseadragon-fabricjs-overlay.git"
+    "url": "git+https://github.com/tdiprima/OpenseadragonFabricjsOverlay.git"
   },
-  "files": [ ],
-  "keywords": [
-    "openseadragon",
-    "plugin",
-    "canvas",
-    "overlay"
-  ],
-  "author": "Alexey Tikhonov",
-  "license": "BSD-3-Clause",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
   "bugs": {
-    "url": "https://github.com/altert/openseadragon-fabricjs-overlay/issues"
+    "url": "https://github.com/tdiprima/OpenseadragonFabricjsOverlay/issues"
   },
-  "homepage": "https://github.com/altert/openseadragon-fabricjs-overlay#readme"
+  "homepage": "https://github.com/tdiprima/OpenseadragonFabricjsOverlay#readme",
+  "devDependencies": {
+    "openseadragon": "^2.4.2",
+    "standard": "^16.0.3"
+  }
 }
