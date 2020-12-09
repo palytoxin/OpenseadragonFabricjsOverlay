@@ -8,6 +8,7 @@
 
   <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
   <script src="fabric/fabric.adapted.js"></script>
+
   <style>
     html,
     body,
@@ -17,6 +18,11 @@
       margin: 0;
     }
   </style>
+
+</head>
+
+<body>
+<div class="openseadragon1" id="contentDiv"></div>
   <script>
     // ----------
     App = {
@@ -110,37 +116,35 @@
           return obj && obj !== 'null' && obj !== 'undefined'
         }
 
-        /**
-         * Toggle button on and off
-         */
-        function btnDraw (flag, over, shape, txt) {
-          // Toggle fabric canvas draw
-          if (flag) {
-            // Disable OSD mousevents
-            self.viewer.setMouseNavEnabled(false)
-            self.viewer.outerTracker.setTracking(false)
-            // Activate fabric freedrawing mode
-            over.fabricCanvas().isDrawingMode = true
-            // Button
-            shape.set('fill', 'lightgreen')
-            txt.text = 'Draw'
-            txt.left = 990
-            over.fabricCanvas().add(txt)
-          } else {
-            // Stop drawing & switch back to zoom
-            // Add tracking back to OSD
-            self.viewer.setMouseNavEnabled(true)
-            self.viewer.outerTracker.setTracking(true)
-            // Disable freedrawing mode
-            over.fabricCanvas().isDrawingMode = false
-            // Button
-            shape.set('fill', 'lightgray')
-            over.fabricCanvas().add(shape)
-            txt.text = 'Start\n drawing'
-            txt.left = 950
-            over.fabricCanvas().add(txt)
-          }
+      // Toggle button on and off
+      function btnDraw(flag, over, shape, txt) {
+        // Toggle fabric canvas draw
+        if (flag) {
+          // Disable OSD mouse events
+          self.viewer.setMouseNavEnabled(false)
+          self.viewer.outerTracker.setTracking(false)
+          // Activate fabric free-drawing mode
+          over.fabricCanvas().isDrawingMode = true
+          // Button
+          shape.set('fill', 'lightgreen')
+          txt.text = 'Draw'
+          txt.left = 990
+          over.fabricCanvas().add(txt)
+        } else {
+          // Stop drawing & switch back to zoom
+          // Add tracking back to OSD
+          self.viewer.setMouseNavEnabled(true)
+          self.viewer.outerTracker.setTracking(true)
+          // Disable free-drawing mode
+          over.fabricCanvas().isDrawingMode = false
+          // Button
+          shape.set('fill', 'lightgray')
+          over.fabricCanvas().add(shape)
+          txt.text = 'Start\n drawing'
+          txt.left = 950
+          over.fabricCanvas().add(txt)
         }
+      }
 
         overlay.fabricCanvas().on('mouse:up', function (event) {
           if (isRealValue(event.target)) {
@@ -148,25 +152,25 @@
               btnDraw(false, overlay, circle2, text)
             }
 
-            // Animate circle on mouse release (try to drag circle up)
-            if (event.target.action === 'gravity') {
-              delta = overlay.fabricCanvas().height - event.target.top
-              if (delta > 0) {
-                circle.animate('top', '+=' + (delta + 420), {
-                  onChange: overlay.fabricCanvas().renderAll.bind(overlay.fabricCanvas()),
-                  duration: 2000,
-                  easing: fabric.util.ease.easeOutBounce
-                })
-                circle.animate('scaleY', '-=.1', {
-                  onChange: overlay.fabricCanvas().renderAll.bind(overlay.fabricCanvas()),
-                  duration: 1000
-                })
-              }
+          // Animate circle on mouse release (try to drag circle up)
+          if (event.target.action === 'gravity') {
+            let delta = overlay.fabricCanvas().height - event.target.top
+            if (delta > 0) {
+              circle.animate('top', '+=' + (delta + 420), {
+                onChange: overlay.fabricCanvas().renderAll.bind(overlay.fabricCanvas()),
+                duration: 2000,
+                easing: fabric.util.ease.easeOutBounce
+              })
+              circle.animate('scaleY', '-=.1', {
+                onChange: overlay.fabricCanvas().renderAll.bind(overlay.fabricCanvas()),
+                duration: 1000
+              })
             }
-          } else {
-            btnDraw(false, overlay, circle2, text)
           }
-        })
+        } else {
+          btnDraw(false, overlay, circle2, text)
+        }
+      })
 
         // Add fabric circle with text
         let circle2 = new fabric.Circle({
@@ -212,10 +216,6 @@
     })
 
   </script>
-</head>
 
-<body>
-<div class="openseadragon1" id="contentDiv"></div>
 </body>
-
 </html>

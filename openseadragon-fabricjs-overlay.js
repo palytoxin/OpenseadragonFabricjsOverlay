@@ -1,5 +1,6 @@
 /**
- * OpenSeadragon canvas Overlay plugin based on svg overlay plugin and fabric.js
+ * OpenSeadragon canvas overlay plugin based on svg overlay plugin and fabric.js
+ * @version 1.0.0
  */
 (function () {
   if (!window.OpenSeadragon) {
@@ -23,19 +24,10 @@
     options = checkOptions(options)
 
     this._fabricjsOverlayInfo = new Overlay(this, options.static)
-    if (options && options.scale) {
-      this._fabricjsOverlayInfo._scale = options.scale // arbitrary scale for created fabric canvas
-    } else {
-      this._fabricjsOverlayInfo._scale = 1000
-    }
-
     return this._fabricjsOverlayInfo
   }
 
-  /**
-   * Static counter for multiple overlays differentiation
-   * @type {function(): number}
-   */
+  // Static counter for multiple overlays differentiation
   const counter = (function () {
     let i = 1
 
@@ -61,11 +53,8 @@
     return options
   }
 
-  /**
-   * Overlay object
-   * @param viewer
-   * @constructor
-   */
+  // ----------
+  // Constructor
   const Overlay = function (viewer, staticCanvas) {
     const self = this
 
@@ -99,9 +88,7 @@
     // Disable fabric selection because default click is tracked by OSD
     this._fabricCanvas.selection = false
 
-    /**
-     * Prevent OSD mousedown on fabric objects
-     */
+    // Prevent OSD click events on fabric objects
     this._fabricCanvas.on('mouse:down', function (options) {
       if (options.target) {
         options.e.preventDefaultAction = true
@@ -110,9 +97,6 @@
       }
     })
 
-    /**
-     * Prevent OSD mouseup on fabric objects
-     */
     this._fabricCanvas.on('mouse:up', function (options) {
       if (options.target) {
         options.e.preventDefaultAction = true
@@ -121,18 +105,16 @@
       }
     })
 
-    /**
-     * Update viewport
-     */
+    // Callback functions:
+
+    // Resize the fabric.js overlay
     this._viewer.addHandler('update-viewport', function () {
+      // called on 'open', when the viewer or window changes size, ...
       self.resize()
       self.resizeCanvas()
       self.render()
     })
 
-    /**
-     * Resize the fabric.js overlay when the viewer or window changes size
-     */
     this._viewer.addHandler('open', function () {
       self.resize()
       self.resizeCanvas()
@@ -143,15 +125,7 @@
     })
   }
 
-  /**
-   * Overlay prototype
-   * {{canvas: (function(): HTMLCanvasElement),
-   * fabricCanvas: (function(): *),
-   * clear: Overlay.clear,
-   * resizeCanvas: Overlay.resizeCanvas,
-   * resize: Overlay.resize,
-   * render: Overlay.render}}
-   */
+  // ----------
   Overlay.prototype = {
     // ----------
     canvas: function () {
@@ -163,6 +137,7 @@
     },
     // ----------
     clear: function () {
+      // this._fabricCanvas.clearAll()
       this._fabricCanvas.clear()
     },
     render: function () {
@@ -170,12 +145,12 @@
     },
     // ----------
     resize: function () {
+      // Resize OSD container
       if (this._containerWidth !== this._viewer.container.clientWidth) {
         this._containerWidth = this._viewer.container.clientWidth
         this._canvasdiv.setAttribute('width', this._containerWidth)
         this._canvas.setAttribute('width', this._containerWidth)
       }
-
       if (this._containerHeight !== this._viewer.container.clientHeight) {
         this._containerHeight = this._viewer.container.clientHeight
         this._canvasdiv.setAttribute('height', this._containerHeight)
@@ -183,6 +158,7 @@
       }
     },
     resizeCanvas: function () {
+      // Resize overlay canvas
       const origin = new OpenSeadragon.Point(0, 0)
       const viewportZoom = this._viewer.viewport.getZoom(true)
       this._fabricCanvas.setWidth(this._containerWidth)
@@ -194,11 +170,8 @@
       const x = Math.round(viewportWindowPoint.x)
       const y = Math.round(viewportWindowPoint.y)
       const canvasOffset = this._canvasdiv.getBoundingClientRect()
-
       const pageScroll = OpenSeadragon.getPageScroll()
-
       this._fabricCanvas.absolutePan(new fabric.Point(canvasOffset.left - x + pageScroll.x, canvasOffset.top - y + pageScroll.y))
     }
-
   }
 })()
