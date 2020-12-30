@@ -5,7 +5,7 @@
   <title>OpenSeadragon Fabricjs Overlay Demo</title>
   <script src="openseadragon/openseadragon.js"></script>
   <script src="openseadragon-fabricjs-overlay.js"></script>
-  <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+  <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
   <script src="fabric/fabric.adapted.js"></script>
 
   <style>
@@ -76,7 +76,7 @@
       })
 
       // Initialize overlay
-      let overlay = this.viewer.fabricjsOverlay()
+      let overlay = this.viewer.fabricjsOverlay({ scale: 5 })
 
       // Add fabric rectangle
       let rect = new fabric.Rect({

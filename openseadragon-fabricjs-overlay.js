@@ -23,7 +23,7 @@
   OpenSeadragon.Viewer.prototype.fabricjsOverlay = function (options) {
     options = checkOptions(options)
 
-    this._fabricjsOverlayInfo = new Overlay(this, options.static)
+    this._fabricjsOverlayInfo = new Overlay(this, options)
     return this._fabricjsOverlayInfo
   }
 
@@ -55,7 +55,7 @@
 
   // ----------
   // Constructor
-  const Overlay = function (viewer, staticCanvas) {
+  const Overlay = function (viewer, options) {
     const self = this
 
     this._viewer = viewer
@@ -79,7 +79,9 @@
     this.resize()
 
     // make the canvas static if specified, ordinary otherwise
-    if (staticCanvas) {
+    const { static, scale} = options
+    this._scale = scale
+    if (static) {
       this._fabricCanvas = new fabric.StaticCanvas(this._canvas)
     } else {
       this._fabricCanvas = new fabric.Canvas(this._canvas)
@@ -161,11 +163,12 @@
       // Resize overlay canvas
       const origin = new OpenSeadragon.Point(0, 0)
       const viewportZoom = this._viewer.viewport.getZoom(true)
+
       this._fabricCanvas.setWidth(this._containerWidth)
       this._fabricCanvas.setHeight(this._containerHeight)
-      // let zoom = this._viewer.viewport._containerInnerSize.x * viewportZoom / this._scale;
-      // this._fabricCanvas.setZoom(zoom);
-      this._fabricCanvas.setZoom(viewportZoom)
+      const zoom = this._viewer.world.getItemAt(0).viewportToImageZoom(viewportZoom)
+      this._fabricCanvas.setZoom(zoom * this._scale);
+
       const viewportWindowPoint = this._viewer.viewport.viewportToWindowCoordinates(origin)
       const x = Math.round(viewportWindowPoint.x)
       const y = Math.round(viewportWindowPoint.y)
